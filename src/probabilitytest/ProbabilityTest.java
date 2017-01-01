@@ -1,21 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package probabilitytest;
 
-/**
- *
- * @author bajcz
- */
-public class ProbabilityTest {
+import probabilitytest.behaviour.Probability;
+import probabilitytest.gui.GuiBuilder;
 
-    /**
-     * @param args the command line arguments
-     */
+public class ProbabilityTest {
+    private GuiBuilder guiBuilder;
+    
     public static void main(String[] args) {
-        // TODO code application logic here
+        ProbabilityTest pt = new ProbabilityTest();
+        pt.start();
+    }
+
+    private void start() {
+        guiBuilder = new GuiBuilder();
     }
     
 }
