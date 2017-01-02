@@ -4,16 +4,20 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
+import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
@@ -42,7 +46,11 @@ public class GuiBuilder {
     JButton addButton;
     JButton removeButton;
     JButton clearButton;
+    JButton rollButton;
+    
     JList itemList;
+    DefaultListModel listModel;
+    JScrollPane pane;
     
     JLabel checkLabel;
     JSlider slider;
@@ -54,7 +62,7 @@ public class GuiBuilder {
     JFreeChart chart;
     ChartPanel chartPanel;
     
-    int[] numbers;
+    Integer[] numbers;
     int rolls;
     
     public GuiBuilder() {
@@ -83,17 +91,18 @@ public class GuiBuilder {
         //graphPanel.setBackground(Color.YELLOW);
         
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
-        listPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         
         addPanel = new JPanel();
         addLabel = new JLabel("Add new entries here:");
-        addField = new JTextField(3);
-        addButton = new JButton("Add");
+        addField = new JTextField(5);
+        addButton = new JButton("Add");    
+        
+        addButton.addActionListener(new AddButtonListener());
+        
         addPanel.add(addLabel);
         addPanel.add(addField);
         addPanel.add(addButton);
-        listPanel.add(addPanel);
-        
+                
         slider = new JSlider(JSlider.HORIZONTAL,X_MIN,X_MAX,X_INIT);
         slider.setMajorTickSpacing(1);
         slider.setPaintTicks(true);
@@ -101,6 +110,15 @@ public class GuiBuilder {
         slider.addChangeListener(new SliderListener());
         checkLabel = new JLabel();
         updateRolls();
+        
+        listModel = new DefaultListModel();
+        itemList = new JList(listModel);
+        itemList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        itemList.setLayoutOrientation(JList.VERTICAL);
+        pane = new JScrollPane(itemList);
+        
+        listPanel.add(addPanel);
+        listPanel.add(pane);
         listPanel.add(slider);
         listPanel.add(checkLabel);
                
@@ -114,7 +132,7 @@ public class GuiBuilder {
     
     public void updateRolls(){
         rolls = slider.getValue();
-        checkLabel.setText("Number of rolls: 10^"+rolls+" = "+Math.pow(10, rolls));
+        checkLabel.setText("Number of rolls: 10^"+rolls);
     }
     
     class SliderListener implements ChangeListener{
@@ -123,5 +141,19 @@ public class GuiBuilder {
         }
     }
     
+    class AddButtonListener implements ActionListener{
+        public void actionPerformed(ActionEvent e) {
+            if(isNumeric(addField.getText())){
+                listModel.addElement(Integer.parseInt(addField.getText()));
+            }            
+        }
+    }
+        
     
+    public static boolean isNumeric(String str){
+        for (char c : str.toCharArray()){
+            if (!Character.isDigit(c)) return false;
+            }
+        return true;
+    }
 }
