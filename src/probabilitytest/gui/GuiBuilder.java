@@ -59,13 +59,13 @@ public class GuiBuilder {
     JSlider slider;
     
     static final int X_MIN = 0;
-    static final int X_MAX = 9;
-    static final int X_INIT = 3;
+    static final int X_MAX = 9000;
+    static final int X_INIT = 3000;
     
     JFreeChart chart;
     ChartPanel chartPanel;
     
-    int rolls;
+    double rolls;
     
     public GuiBuilder() {
         rolls = X_INIT;
@@ -106,8 +106,8 @@ public class GuiBuilder {
                 
         slider = new JSlider(JSlider.HORIZONTAL,X_MIN,X_MAX,X_INIT);
         slider.setMajorTickSpacing(1);
-        slider.setPaintTicks(true);
-        slider.setPaintLabels(true);
+        slider.setPaintTicks(false);
+        slider.setPaintLabels(false);
         slider.addChangeListener(new SliderListener());
         checkLabel = new JLabel();
         updateRolls();
@@ -151,7 +151,7 @@ public class GuiBuilder {
     }
     
     public void updateRolls(){
-        rolls = slider.getValue();
+        rolls = ((double)slider.getValue())/1000;
         checkLabel.setText("Number of rolls: 10^"+rolls);
     }
     
@@ -193,7 +193,7 @@ public class GuiBuilder {
                 for(int i=0;i<listModel.getSize();i++){
                     numbers[i]=listModel.getElementAt(i).intValue();
                 }
-                displayChart(Probability.roll(numbers, slider.getValue()));
+                displayChart(Probability.roll(numbers, (int)Math.pow(10.0, rolls)));
             }
         }
     }
