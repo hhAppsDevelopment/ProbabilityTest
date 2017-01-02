@@ -75,7 +75,7 @@ public class GuiBuilder {
     
     public void buildGui(){
         frame = new JFrame("ProbabilityTest");
-        bgPanel = new JPanel(new GridLayout(1,2));
+        bgPanel = new JPanel();
         
         frame.setContentPane(bgPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -95,6 +95,8 @@ public class GuiBuilder {
         //graphPanel.setBackground(Color.YELLOW);
         
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
+        listPanel.setSize(300,350);
+        
         
         addPanel = new JPanel();
         addLabel = new JLabel("Add new entries here:");
