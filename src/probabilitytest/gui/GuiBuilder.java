@@ -1,11 +1,13 @@
 package probabilitytest.gui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -76,7 +78,7 @@ public class GuiBuilder {
         frame.setContentPane(bgPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        frame.setSize(600,400);
+        frame.setSize(600,300);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setLocation(dim.width/2-(frame.getSize().width/2), dim.height/2-frame.getSize().height/2);
         
@@ -119,8 +121,12 @@ public class GuiBuilder {
         
         listPanel.add(addPanel);
         listPanel.add(pane);
+        listPanel.add(Box.createVerticalGlue());
         listPanel.add(slider);
         listPanel.add(checkLabel);
+        
+        slider.setAlignmentX(Component.CENTER_ALIGNMENT);
+        checkLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
                
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
