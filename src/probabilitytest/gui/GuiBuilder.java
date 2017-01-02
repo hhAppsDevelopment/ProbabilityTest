@@ -54,7 +54,7 @@ public class GuiBuilder {
     JButton rollButton;
     
     JList itemList;
-    DefaultListModel listModel;
+    DefaultListModel<Integer> listModel;
     JScrollPane pane;
     
     JLabel checkLabel;
@@ -128,6 +128,7 @@ public class GuiBuilder {
         
         removeButton.addActionListener(new RemoveButtonListener());
         clearButton.addActionListener(new ClearButtonListener());
+        rollButton.addActionListener(new RollButtonListener());
         
         buttonPanel.add(removeButton);
         buttonPanel.add(clearButton);
@@ -167,7 +168,9 @@ public class GuiBuilder {
         public void actionPerformed(ActionEvent e) {
             if(isNumeric(addField.getText())){
                 listModel.addElement(Integer.parseInt(addField.getText()));
-            }            
+            }
+            addField.setText("");
+            addField.requestFocus();
         }
     }
         
@@ -177,15 +180,25 @@ public class GuiBuilder {
                 int index = itemList.getSelectedIndex();
                 listModel.remove(index);
             }            
-        }
-        
+        }        
     }
     
     class ClearButtonListener implements ActionListener{
         public void actionPerformed(ActionEvent e) {
             listModel.removeAllElements();
+        }        
+    }
+    
+    class RollButtonListener implements ActionListener{
+        public void actionPerformed(ActionEvent e) {
+            if(listModel.getSize()!=0){
+                int[] numbers = new int[listModel.getSize()];
+                for(int i=0;i<listModel.getSize();i++){
+                    numbers[i]=listModel.getElementAt(i).intValue();
+                }
+                System.out.println(numbers[1]);
+            }
         }
-        
     }
     
     public static boolean isNumeric(String str){
