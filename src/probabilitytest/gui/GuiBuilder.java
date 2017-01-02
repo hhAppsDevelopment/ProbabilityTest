@@ -8,6 +8,10 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -30,6 +34,8 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
 import probabilitytest.behaviour.Probability;
 
 public class GuiBuilder {
@@ -67,7 +73,6 @@ public class GuiBuilder {
     JFreeChart chart;
     ChartPanel chartPanel;
     
-    Integer[] numbers;
     int rolls;
     
     public GuiBuilder() {
@@ -196,7 +201,7 @@ public class GuiBuilder {
                 for(int i=0;i<listModel.getSize();i++){
                     numbers[i]=listModel.getElementAt(i).intValue();
                 }
-                System.out.println(numbers[1]);
+                displayChart(Probability.roll(numbers, slider.getValue()));
             }
         }
     }
@@ -206,5 +211,25 @@ public class GuiBuilder {
             if (!Character.isDigit(c)) return false;
             }
         return true;
+    }
+    
+    public void displayChart(HashMap<Integer,Double> values){
+        graphPanel.removeAll();
+        JFreeChart chart = ChartFactory.createBarChart(
+         "Results", 
+         "Category", "Value", 
+         createDataset(values),PlotOrientation.VERTICAL, 
+         true, true, false);
+        chartPanel = new ChartPanel(chart,false);
+        chartPanel.setPreferredSize(new Dimension(300,350));
+        graphPanel.add(chartPanel);
+    }
+    
+    public CategoryDataset createDataset(HashMap<Integer,Double> values){
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        for(HashMap.Entry<Integer,Double> entry:values.entrySet()){
+            dataset.addValue(entry.getValue(),"Roll" ,entry.getKey());
+        }
+        return dataset;
     }
 }

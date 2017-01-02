@@ -6,7 +6,7 @@ import probabilitytest.model.Dice;
 
 public class Probability {
 
-    public static HashMap<Integer, Double> startAnimation(int[] numbers, int numberOfChecks){
+    public static HashMap<Integer, Double> roll(int[] numbers, int numberOfChecks){
         HashMap<Integer, Double> hashMap = new HashMap<>();
         Dice dice = new Dice(numbers);
         double[] probabilities = dice.throwDice(numberOfChecks);
