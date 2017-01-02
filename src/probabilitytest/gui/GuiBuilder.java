@@ -11,10 +11,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -38,14 +41,22 @@ public class GuiBuilder {
     JButton removeButton;
     JList itemList;
     
+    JLabel checkLabel;
+    JSlider slider;
+    
+    static final int X_MIN = 0;
+    static final int X_MAX = 9;
+    static final int X_INIT = 3;
+    
     JFreeChart chart;
     ChartPanel chartPanel;
     
+    int[] numbers;
+    int rolls;
     
-    /*public GuiBuilder() {
-        int[] i = {1,1,1,1,2,3}; //can be null, too
-        Probability.startAnimation(i, 500);
-    }*/
+    public GuiBuilder() {
+        rolls = X_INIT;
+    }
     
     public void buildGui(){
         frame = new JFrame("ProbabilityTest");
@@ -65,17 +76,27 @@ public class GuiBuilder {
         bgPanel.add(listPanel);
         bgPanel.add(graphPanel);
         
-        listPanel.setBackground(Color.RED);
-        graphPanel.setBackground(Color.YELLOW);
+        //listPanel.setBackground(Color.RED);
+        //graphPanel.setBackground(Color.YELLOW);
         
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
         listPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         addLabel = new JLabel("Add new entries here:");
-        addField = new JTextField(20);
+        addField = new JTextField(3);
         addButton = new JButton("Add");
         listPanel.add(addLabel);
         listPanel.add(addField);
         listPanel.add(addButton);
+        
+        slider = new JSlider(JSlider.HORIZONTAL,X_MIN,X_MAX,X_INIT);
+        slider.setMajorTickSpacing(1);
+        slider.setPaintTicks(true);
+        slider.setPaintLabels(true);
+        slider.addChangeListener(new SliderListener());
+        checkLabel = new JLabel();
+        updateRolls();
+        listPanel.add(slider);
+        listPanel.add(checkLabel);
                
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -85,4 +106,14 @@ public class GuiBuilder {
         frame.setVisible(true);
     }
     
+    public void updateRolls(){
+        rolls = slider.getValue();
+        checkLabel.setText("Number of rolls: 10^"+rolls+" = "+Math.pow(10, rolls));
+    }
+    
+    class SliderListener implements ChangeListener{
+        public void stateChanged(ChangeEvent e){
+            updateRolls();
+        }
+    }
 }
