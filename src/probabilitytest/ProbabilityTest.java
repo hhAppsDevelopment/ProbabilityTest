@@ -13,6 +13,7 @@ public class ProbabilityTest {
 
     private void start() {
         guiBuilder = new GuiBuilder();
+        guiBuilder.buildGui();
     }
     
 }
