@@ -152,7 +152,7 @@ public class GuiBuilder {
     
     public void updateRolls(){
         rolls = ((double)slider.getValue())/1000;
-        checkLabel.setText("Number of rolls: 10^"+rolls);
+        checkLabel.setText("Number of rolls: 10^"+rolls + "(" +(int)Math.pow(10.0, rolls) +")");
     }
     
     class SliderListener implements ChangeListener{
