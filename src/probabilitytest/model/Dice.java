@@ -4,18 +4,13 @@ package probabilitytest.model;
 The dice represents the subject of the probability check. Originally it has 6 sides, and user-defined numbers on each.
 */
 public class Dice {
-    private final int oldalSzam = 6;
+    private final int oldalSzam;
     private int[] numbers;    
     
     
     public Dice(int[] numbers) {
-        if(numbers != null && numbers.length >= oldalSzam)this.numbers = numbers;  //If null or not enough arguments are given, the original value of 1..6 is given to the dice
-        else{
-            this.numbers = new int[oldalSzam];
-            for(int i = 0; i < this.oldalSzam; i++){
-                this.numbers[i] = i + 1;
-            }
-        }
+        this.numbers = numbers;
+        this.oldalSzam = numbers.length;
     }
     
     public double[] throwDice (int numberOfChecks){
@@ -40,7 +35,4 @@ public class Dice {
         return numbers;
     }
     
-    public void setNumbers(int[] numbers) {
-        this.numbers = numbers;
-    }
 }
