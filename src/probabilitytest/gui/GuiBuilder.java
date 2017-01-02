@@ -2,6 +2,7 @@ package probabilitytest.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,10 +36,12 @@ public class GuiBuilder {
     JPanel listPanel;   // Left panel
     JPanel graphPanel;  // Right panel
     
+    JPanel addPanel;
     JLabel addLabel;
     JTextField addField;
     JButton addButton;
     JButton removeButton;
+    JButton clearButton;
     JList itemList;
     
     JLabel checkLabel;
@@ -60,7 +63,7 @@ public class GuiBuilder {
     
     public void buildGui(){
         frame = new JFrame("ProbabilityTest");
-        bgPanel = new JPanel();
+        bgPanel = new JPanel(new GridLayout(1,2));
         
         frame.setContentPane(bgPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -81,12 +84,15 @@ public class GuiBuilder {
         
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
         listPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        
+        addPanel = new JPanel();
         addLabel = new JLabel("Add new entries here:");
         addField = new JTextField(3);
         addButton = new JButton("Add");
-        listPanel.add(addLabel);
-        listPanel.add(addField);
-        listPanel.add(addButton);
+        addPanel.add(addLabel);
+        addPanel.add(addField);
+        addPanel.add(addButton);
+        listPanel.add(addPanel);
         
         slider = new JSlider(JSlider.HORIZONTAL,X_MIN,X_MAX,X_INIT);
         slider.setMajorTickSpacing(1);
@@ -116,4 +122,6 @@ public class GuiBuilder {
             updateRolls();
         }
     }
+    
+    
 }
