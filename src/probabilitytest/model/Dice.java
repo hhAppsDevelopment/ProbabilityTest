@@ -18,15 +18,15 @@ public class Dice {
         }
     }
     
-    public double[] throwDice (int numberOfCkecks){
+    public double[] throwDice (int numberOfChecks){
         double[] probabilities = new double[numbers.length];
         for(int i = 0; i<numbers.length; i++)probabilities[i] = 0.0;
-        for(int i = 0; i<numberOfCkecks; i++){
+        for(int i = 0; i<numberOfChecks; i++){
             int which = (int) Math.floor(Math.random()*numbers.length);
             probabilities[which]++;
         }
         for(int i = 0; i<numbers.length; i++){
-            probabilities[i] = probabilities[i] /((double)numberOfCkecks);
+            probabilities[i] = probabilities[i] /((double)numberOfChecks);
         }
         return probabilities;
     }
