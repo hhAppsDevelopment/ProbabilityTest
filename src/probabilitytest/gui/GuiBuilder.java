@@ -3,6 +3,7 @@ package probabilitytest.gui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -75,12 +76,13 @@ public class GuiBuilder {
     
     public void buildGui(){
         frame = new JFrame("ProbabilityTest");
-        bgPanel = new JPanel();
+        bgPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         
         frame.setContentPane(bgPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        frame.setSize(600,350);
+        frame.setSize(600,310);
+        frame.setMinimumSize(new Dimension(300, 310));
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setLocation(dim.width/2-(frame.getSize().width/2), dim.height/2-frame.getSize().height/2);
         
@@ -91,12 +93,8 @@ public class GuiBuilder {
         bgPanel.add(listPanel);
         bgPanel.add(graphPanel);
         
-        //listPanel.setBackground(Color.RED);
-        //graphPanel.setBackground(Color.YELLOW);
-        
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
-        listPanel.setSize(300,350);
-        
+        listPanel.setSize(300,330);    
         
         addPanel = new JPanel();
         addLabel = new JLabel("Add new entries here:");
@@ -127,6 +125,9 @@ public class GuiBuilder {
         removeButton = new JButton("Remove");
         clearButton = new JButton("Clear");
         rollButton = new JButton("Roll");
+        
+        removeButton.addActionListener(new RemoveButtonListener());
+        clearButton.addActionListener(new ClearButtonListener());
         
         buttonPanel.add(removeButton);
         buttonPanel.add(clearButton);
@@ -170,6 +171,22 @@ public class GuiBuilder {
         }
     }
         
+    class RemoveButtonListener implements ActionListener{
+        public void actionPerformed(ActionEvent e) {
+            if(listModel.getSize()!= 0){
+                int index = itemList.getSelectedIndex();
+                listModel.remove(index);
+            }            
+        }
+        
+    }
+    
+    class ClearButtonListener implements ActionListener{
+        public void actionPerformed(ActionEvent e) {
+            listModel.removeAllElements();
+        }
+        
+    }
     
     public static boolean isNumeric(String str){
         for (char c : str.toCharArray()){
