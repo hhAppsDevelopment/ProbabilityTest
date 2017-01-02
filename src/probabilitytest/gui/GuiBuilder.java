@@ -46,6 +46,8 @@ public class GuiBuilder {
     JLabel addLabel;
     JTextField addField;
     JButton addButton;
+    
+    JPanel buttonPanel;
     JButton removeButton;
     JButton clearButton;
     JButton rollButton;
@@ -78,7 +80,7 @@ public class GuiBuilder {
         frame.setContentPane(bgPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        frame.setSize(600,300);
+        frame.setSize(600,350);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setLocation(dim.width/2-(frame.getSize().width/2), dim.height/2-frame.getSize().height/2);
         
@@ -119,11 +121,22 @@ public class GuiBuilder {
         itemList.setLayoutOrientation(JList.VERTICAL);
         pane = new JScrollPane(itemList);
         
+        buttonPanel = new JPanel();
+        removeButton = new JButton("Remove");
+        clearButton = new JButton("Clear");
+        rollButton = new JButton("Roll");
+        
+        buttonPanel.add(removeButton);
+        buttonPanel.add(clearButton);
+        buttonPanel.add(rollButton);
+        
         listPanel.add(addPanel);
         listPanel.add(pane);
         listPanel.add(Box.createVerticalGlue());
         listPanel.add(slider);
         listPanel.add(checkLabel);
+        listPanel.add(Box.createVerticalGlue());
+        listPanel.add(buttonPanel);
         
         slider.setAlignmentX(Component.CENTER_ALIGNMENT);
         checkLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
