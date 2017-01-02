@@ -193,7 +193,7 @@ public class GuiBuilder {
                 for(int i=0;i<listModel.getSize();i++){
                     numbers[i]=listModel.getElementAt(i).intValue();
                 }
-                displayChart(Probability.roll(numbers, slider.getValue()));
+                displayChart(Probability.roll(numbers, (int) Math.pow(10,slider.getValue())));
             }
         }
     }
@@ -212,7 +212,8 @@ public class GuiBuilder {
          "Category", "Value", 
          createDataset(values),PlotOrientation.VERTICAL, 
          false, false, false);
-        chartPanel = new ChartPanel(chart,false);       
+        chartPanel = new ChartPanel(chart,false);
+        chartPanel.setPreferredSize(new Dimension(300,270));
         graphPanel.add(chartPanel);
         frame.pack();
         graphPanel.validate();
