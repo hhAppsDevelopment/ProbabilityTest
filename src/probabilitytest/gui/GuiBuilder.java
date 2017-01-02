@@ -219,10 +219,11 @@ public class GuiBuilder {
          "Results", 
          "Category", "Value", 
          createDataset(values),PlotOrientation.VERTICAL, 
-         true, true, false);
-        chartPanel = new ChartPanel(chart,false);
-        chartPanel.setPreferredSize(new Dimension(300,350));
+         false, false, false);
+        chartPanel = new ChartPanel(chart,false);       
         graphPanel.add(chartPanel);
+        frame.pack();
+        graphPanel.validate();
     }
     
     public CategoryDataset createDataset(HashMap<Integer,Double> values){
