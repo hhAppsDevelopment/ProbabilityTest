@@ -90,7 +90,7 @@ public class GuiBuilder {
     }
     
     public void buildGui(){
-        frame = new JFrame("ProbabilityTest");
+        frame = new JFrame("Valószínűségvizsgálat");
         bgPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         
         frame.setContentPane(bgPanel);
@@ -112,9 +112,9 @@ public class GuiBuilder {
         listPanel.setSize(350,330);    
         
         addPanel = new JPanel();
-        addLabel = new JLabel("Add new entries here:");
+        addLabel = new JLabel("Lehetőségek (számok) felvitele: ");
         addField = new JTextField(5);
-        addButton = new JButton("Add");    
+        addButton = new JButton("Hozzáad");    
         
         addButton.addActionListener(new AddButtonListener());
         
@@ -142,15 +142,15 @@ public class GuiBuilder {
         relBox = new JCheckBox();
         relBox.addActionListener(new RelBoxActionListener());
         relPanel = new JPanel();
-        relLabel = new JLabel("Relative");
+        relLabel = new JLabel("Relatív");
         
         relPanel.add(relBox);
         relPanel.add(relLabel);
         
         contPanel = new JPanel();
         indBox = new JCheckBox();
-        indLabel = new JLabel("Show selected over time");
-        fullscrButton = new JButton("Fullscreen");
+        indLabel = new JLabel("A kiválasztott adat változása(f(t))");
+        fullscrButton = new JButton("Teljesképernyő");
         
         fullscrButton.setEnabled(false);
         fullscrButton.addActionListener(new FullscrButtonListener());
@@ -159,9 +159,9 @@ public class GuiBuilder {
         contPanel.add(fullscrButton);
         
         buttonPanel = new JPanel();
-        removeButton = new JButton("Remove");
-        clearButton = new JButton("Clear");
-        rollButton = new JButton("Roll");
+        removeButton = new JButton("Eltávolítás");
+        clearButton = new JButton("Törlés");
+        rollButton = new JButton("Dobás");
         
         removeButton.addActionListener(new RemoveButtonListener());
         clearButton.addActionListener(new ClearButtonListener());
@@ -198,7 +198,7 @@ public class GuiBuilder {
     
     public void updateRolls(){
         rolls = ((double)slider.getValue())/1000;
-        checkLabel.setText("Number of rolls: 10^"+rolls + "(" +(int)Math.pow(10.0, rolls) +")");
+        checkLabel.setText("Dobások száma: 10^"+rolls + " (" +(int)Math.pow(10.0, rolls) +")");
     }
 
     class FullscrButtonListener implements ActionListener {
@@ -279,8 +279,8 @@ public class GuiBuilder {
     
     public JFreeChart getBarChart(HashMap<Integer,Double> values, boolean b){
         JFreeChart chart = ChartFactory.createBarChart(
-         "Results", 
-         "Numbers", "Probability", 
+         "Eredmények", 
+         "Számok", "Valószínűség", 
          createDataset(values),PlotOrientation.VERTICAL, 
          false, false, false);
         
@@ -301,8 +301,8 @@ public class GuiBuilder {
     
     public JFreeChart getLineChart(HashMap<Integer,Double> values, boolean b){
         JFreeChart chart = ChartFactory.createLineChart(
-         "Selected number", 
-         "Number of rolls", "Probability", 
+         "Kiválasztott szám", 
+         "Dobások száma", "Valószínűség", 
          createDataset(values),PlotOrientation.VERTICAL, 
          false, false, false);
         
@@ -324,7 +324,7 @@ public class GuiBuilder {
     public CategoryDataset createDataset(HashMap<Integer,Double> values){
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         for(HashMap.Entry<Integer,Double> entry:values.entrySet()){
-            dataset.addValue(entry.getValue(),"Roll" ,entry.getKey());
+            dataset.addValue(entry.getValue(),"Dobás" ,entry.getKey());
         }
         return dataset;
     }
