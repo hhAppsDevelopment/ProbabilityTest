@@ -220,7 +220,9 @@ public class GuiBuilder {
         Double min = Collections.min(values.values());
         Double max = Collections.max(values.values());
         Double diff = (max-min)/2;
-        yAxis.setRange(min-diff, max+diff);
+        min = min-diff;
+        if(min<0.0)min = 0.0;
+        yAxis.setRange(min, max+diff);
         chartPanel = new ChartPanel(chart,false);
         chartPanel.setPreferredSize(new Dimension(300,270)); 
         graphPanel.add(chartPanel);
