@@ -6,7 +6,9 @@ import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collections;
 import java.util.HashMap;
+import javafx.scene.chart.ValueAxis;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -26,6 +28,7 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import probabilitytest.behaviour.Probability;
@@ -212,11 +215,18 @@ public class GuiBuilder {
          "Category", "Value", 
          createDataset(values),PlotOrientation.VERTICAL, 
          false, false, false);
+        org.jfree.chart.axis.ValueAxis yAxis = chart.getCategoryPlot().getRangeAxis();
+        
+        Double min = Collections.min(values.values());
+        Double max = Collections.max(values.values());
+        Double diff = (max-min)/2;
+        yAxis.setRange(min-diff, max+diff);
         chartPanel = new ChartPanel(chart,false);
-        chartPanel.setPreferredSize(new Dimension(300,270));
+        chartPanel.setPreferredSize(new Dimension(300,270)); 
         graphPanel.add(chartPanel);
         frame.pack();
         graphPanel.validate();
+        
     }
     
     public CategoryDataset createDataset(HashMap<Integer,Double> values){
