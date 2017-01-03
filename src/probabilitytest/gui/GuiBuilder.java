@@ -53,6 +53,7 @@ public class GuiBuilder {
     JButton removeButton;
     JButton clearButton;
     JButton rollButton;
+    JButton relButton;
     
     JList itemList;
     DefaultListModel<Integer> listModel;
@@ -69,6 +70,8 @@ public class GuiBuilder {
     ChartPanel chartPanel;
     
     double rolls;
+    HashMap<Integer,Double> values;
+    boolean relative;
     
     public GuiBuilder() {
         rolls = X_INIT;
@@ -81,8 +84,8 @@ public class GuiBuilder {
         frame.setContentPane(bgPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        frame.setSize(600,310);
-        frame.setMinimumSize(new Dimension(300, 310));
+        frame.setSize(650,310);
+        frame.setMinimumSize(new Dimension(350, 310));
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setLocation(dim.width/2-(frame.getSize().width/2), dim.height/2-frame.getSize().height/2);
         
@@ -94,7 +97,7 @@ public class GuiBuilder {
         bgPanel.add(graphPanel);
         
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
-        listPanel.setSize(300,330);    
+        listPanel.setSize(350,330);    
         
         addPanel = new JPanel();
         addLabel = new JLabel("Add new entries here:");
@@ -125,14 +128,18 @@ public class GuiBuilder {
         removeButton = new JButton("Remove");
         clearButton = new JButton("Clear");
         rollButton = new JButton("Roll");
+        relButton = new JButton("Relative");
+        relButton.setVisible(false);
         
         removeButton.addActionListener(new RemoveButtonListener());
         clearButton.addActionListener(new ClearButtonListener());
         rollButton.addActionListener(new RollButtonListener());
+        relButton.addActionListener(new RelButtonListener());
         
         buttonPanel.add(removeButton);
         buttonPanel.add(clearButton);
         buttonPanel.add(rollButton);
+        buttonPanel.add(relButton);
         
         listPanel.add(addPanel);
         listPanel.add(pane);
@@ -196,7 +203,22 @@ public class GuiBuilder {
                 for(int i=0;i<listModel.getSize();i++){
                     numbers[i]=listModel.getElementAt(i).intValue();
                 }
-                displayChart(Probability.roll(numbers, (int)Math.pow(10.0, rolls)));
+                values = Probability.roll(numbers, (int)Math.pow(10.0, rolls));
+                displayChart(values, false);
+            }
+        }
+    }
+    
+    class RelButtonListener implements ActionListener{
+        public void actionPerformed(ActionEvent e){
+            if(relative){
+                displayChart(values,false);
+                relative = false;
+                relButton.setText("Relative");
+            } else {
+                displayChart(values,true);
+                relative = true;
+                relButton.setText("Absolute");
             }
         }
     }
@@ -208,21 +230,25 @@ public class GuiBuilder {
         return true;
     }
     
-    public void displayChart(HashMap<Integer,Double> values){
+    public void displayChart(HashMap<Integer,Double> values, boolean b){
         graphPanel.removeAll();
         JFreeChart chart = ChartFactory.createBarChart(
          "Results", 
          "Category", "Value", 
          createDataset(values),PlotOrientation.VERTICAL, 
          false, false, false);
-        org.jfree.chart.axis.ValueAxis yAxis = chart.getCategoryPlot().getRangeAxis();
         
-        Double min = Collections.min(values.values());
-        Double max = Collections.max(values.values());
-        Double diff = (max-min)/2;
-        min = min-diff;
-        if(min<0.0)min = 0.0;
-        yAxis.setRange(min, max+diff);
+        if(b){
+            org.jfree.chart.axis.ValueAxis yAxis = chart.getCategoryPlot().getRangeAxis();
+            Double min = Collections.min(values.values());
+            Double max = Collections.max(values.values());
+            Double diff = (max-min)/2;
+            min = min-diff;
+            if(min<0.0)min = 0.0;
+            yAxis.setRange(min, max+diff);
+        }
+        
+        relButton.setVisible(true);
         chartPanel = new ChartPanel(chart,false);
         chartPanel.setPreferredSize(new Dimension(300,270)); 
         graphPanel.add(chartPanel);
