@@ -150,7 +150,7 @@ public class GuiBuilder {
         contPanel = new JPanel();
         indBox = new JCheckBox();
         indLabel = new JLabel("A kiválasztott adat változása(f(t))");
-        fullscrButton = new JButton("Teljesképernyő");
+        fullscrButton = new JButton("Teljes képernyő");
         
         fullscrButton.setEnabled(false);
         fullscrButton.addActionListener(new FullscrButtonListener());
