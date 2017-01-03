@@ -59,6 +59,11 @@ public class GuiBuilder {
     JCheckBox relBox;
     JLabel relLabel;
     
+    JPanel contPanel;
+    JCheckBox indBox;
+    JLabel indLabel;
+    JButton fullscrButton;
+    
     JList itemList;
     DefaultListModel<Integer> listModel;
     JScrollPane pane;
@@ -77,9 +82,11 @@ public class GuiBuilder {
     double rolls;
     HashMap<Integer,Double> values;
     boolean relative;
+    boolean ind;
     
     public GuiBuilder() {
         rolls = X_INIT;
+        ind = false;
     }
     
     public void buildGui(){
@@ -89,7 +96,7 @@ public class GuiBuilder {
         frame.setContentPane(bgPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        frame.setSize(650,310);
+        frame.setSize(650,370);
         frame.setMinimumSize(new Dimension(350, 310));
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setLocation(dim.width/2-(frame.getSize().width/2), dim.height/2-frame.getSize().height/2);
@@ -133,12 +140,22 @@ public class GuiBuilder {
         pane.setMaximumSize(paneSize);
         
         relBox = new JCheckBox();
-        relBox.addChangeListener(new RelBoxChangeListener());
+        relBox.addActionListener(new RelBoxActionListener());
         relPanel = new JPanel();
         relLabel = new JLabel("Relative");
         
         relPanel.add(relBox);
         relPanel.add(relLabel);
+        
+        contPanel = new JPanel();
+        indBox = new JCheckBox();
+        indLabel = new JLabel("Show selected over time");
+        fullscrButton = new JButton("Fullscreen");
+        
+        fullscrButton.addActionListener(new FullscrButtonListener());
+        contPanel.add(indBox);
+        contPanel.add(indLabel);
+        contPanel.add(fullscrButton);
         
         buttonPanel = new JPanel();
         removeButton = new JButton("Remove");
@@ -162,6 +179,8 @@ public class GuiBuilder {
         listPanel.add(buttonPanel);
         listPanel.add(Box.createVerticalGlue());
         listPanel.add(relPanel);
+        listPanel.add(Box.createVerticalGlue());
+        listPanel.add(contPanel);
         
 
         
@@ -181,11 +200,15 @@ public class GuiBuilder {
         checkLabel.setText("Number of rolls: 10^"+rolls + "(" +(int)Math.pow(10.0, rolls) +")");
     }
 
-    private class RelBoxChangeListener implements ChangeListener {
+    class FullscrButtonListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            
+        }
+    }
 
-        @Override
-        public void stateChanged(ChangeEvent e) {
-                displayChart();
+    class RelBoxActionListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            displayChart(ind);
         }
 
        
@@ -230,9 +253,16 @@ public class GuiBuilder {
                 for(int i=0;i<listModel.getSize();i++){
                     numbers[i]=listModel.getElementAt(i).intValue();
                 }
-                values = Probability.continousRoll(numbers, (int)Math.pow(10.0, rolls), 2);
+                ind = indBox.isSelected();
+                if(ind && !itemList.isSelectionEmpty()) {
+                    values = Probability.continousRoll(numbers, (int)Math.pow(10.0, rolls), listModel.getElementAt(itemList.getSelectedIndex()).intValue());
+                } else {
+                    values = Probability.roll(numbers, (int)Math.pow(10.0, rolls));
+                    indBox.setSelected(false);
+                    ind = indBox.isSelected();
+                }
                 
-                displayChart();
+                displayChart(ind);
             }
         }
     }
@@ -246,6 +276,28 @@ public class GuiBuilder {
     }
     
     public JFreeChart getBarChart(HashMap<Integer,Double> values, boolean b){
+        JFreeChart chart = ChartFactory.createBarChart(
+         "Results", 
+         "Category", "Value", 
+         createDataset(values),PlotOrientation.VERTICAL, 
+         false, false, false);
+        
+        if(b){
+            org.jfree.chart.axis.ValueAxis yAxis = chart.getCategoryPlot().getRangeAxis();
+            Double min = Collections.min(values.values());
+            Double max = Collections.max(values.values());
+            Double diff = (max-min)/2;
+            min = min-diff;
+            if(min<0.0)min = 0.0;
+            yAxis.setRange(min, max+diff);
+        }
+        return chart;
+        
+        
+        
+    }
+    
+    public JFreeChart getLineChart(HashMap<Integer,Double> values, boolean b){
         JFreeChart chart = ChartFactory.createLineChart(
          "Results", 
          "Category", "Value", 
@@ -275,8 +327,12 @@ public class GuiBuilder {
         return dataset;
     }
     
-    public void displayChart(){
-        chartPanel = new ChartPanel(getBarChart(values,relBox.isSelected()));
+    public void displayChart(boolean b){
+        if(!b){
+            chartPanel = new ChartPanel(getBarChart(values,relBox.isSelected()));
+        } else {
+            chartPanel = new ChartPanel(getLineChart(values,relBox.isSelected()));
+        }
         chartPanel.setPreferredSize(new Dimension(300,270)); 
         graphPanel.removeAll();
         graphPanel.add(chartPanel);
