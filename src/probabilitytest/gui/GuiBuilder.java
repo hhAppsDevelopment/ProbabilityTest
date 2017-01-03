@@ -205,6 +205,7 @@ public class GuiBuilder {
                 }
                 values = Probability.roll(numbers, (int)Math.pow(10.0, rolls));
                 displayChart(values, false);
+                relButton.setText("Relative");
             }
         }
     }
