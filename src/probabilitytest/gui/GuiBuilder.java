@@ -13,6 +13,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
@@ -53,7 +54,10 @@ public class GuiBuilder {
     JButton removeButton;
     JButton clearButton;
     JButton rollButton;
-    JButton relButton;
+    
+    JPanel relPanel;
+    JCheckBox relBox;
+    JLabel relLabel;
     
     JList itemList;
     DefaultListModel<Integer> listModel;
@@ -65,6 +69,7 @@ public class GuiBuilder {
     static final int X_MIN = 0;
     static final int X_MAX = 9000;
     static final int X_INIT = 3000;
+    static final Dimension paneSize = new Dimension(100, 150);
     
     JFreeChart chart;
     ChartPanel chartPanel;
@@ -123,23 +128,30 @@ public class GuiBuilder {
         itemList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         itemList.setLayoutOrientation(JList.VERTICAL);
         pane = new JScrollPane(itemList);
+        pane.setSize(paneSize);
+        pane.setPreferredSize(paneSize);
+        pane.setMaximumSize(paneSize);
+        
+        relBox = new JCheckBox();
+        relBox.addChangeListener(new RelBoxChangeListener());
+        relPanel = new JPanel();
+        relLabel = new JLabel("Relative");
+        
+        relPanel.add(relBox);
+        relPanel.add(relLabel);
         
         buttonPanel = new JPanel();
         removeButton = new JButton("Remove");
         clearButton = new JButton("Clear");
         rollButton = new JButton("Roll");
-        relButton = new JButton("Relative");
-        relButton.setVisible(false);
         
         removeButton.addActionListener(new RemoveButtonListener());
         clearButton.addActionListener(new ClearButtonListener());
         rollButton.addActionListener(new RollButtonListener());
-        relButton.addActionListener(new RelButtonListener());
         
         buttonPanel.add(removeButton);
         buttonPanel.add(clearButton);
         buttonPanel.add(rollButton);
-        buttonPanel.add(relButton);
         
         listPanel.add(addPanel);
         listPanel.add(pane);
@@ -148,6 +160,10 @@ public class GuiBuilder {
         listPanel.add(checkLabel);
         listPanel.add(Box.createVerticalGlue());
         listPanel.add(buttonPanel);
+        listPanel.add(Box.createVerticalGlue());
+        listPanel.add(relPanel);
+        
+
         
         slider.setAlignmentX(Component.CENTER_ALIGNMENT);
         checkLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -163,6 +179,16 @@ public class GuiBuilder {
     public void updateRolls(){
         rolls = ((double)slider.getValue())/1000;
         checkLabel.setText("Number of rolls: 10^"+rolls + "(" +(int)Math.pow(10.0, rolls) +")");
+    }
+
+    private class RelBoxChangeListener implements ChangeListener {
+
+        @Override
+        public void stateChanged(ChangeEvent e) {
+                displayChart();
+        }
+
+       
     }
     
     class SliderListener implements ChangeListener{
@@ -197,32 +223,20 @@ public class GuiBuilder {
     }
     
     class RollButtonListener implements ActionListener{
+        
         public void actionPerformed(ActionEvent e) {
             if(listModel.getSize()!=0){
                 int[] numbers = new int[listModel.getSize()];
                 for(int i=0;i<listModel.getSize();i++){
                     numbers[i]=listModel.getElementAt(i).intValue();
                 }
-                values = Probability.roll(numbers, (int)Math.pow(10.0, rolls));
-                displayChart(values, false);
-                relButton.setText("Relative");
+                values = Probability.continousRoll(numbers, (int)Math.pow(10.0, rolls), 2);
+                
+                displayChart();
             }
         }
     }
     
-    class RelButtonListener implements ActionListener{
-        public void actionPerformed(ActionEvent e){
-            if(relative){
-                displayChart(values,false);
-                relative = false;
-                relButton.setText("Relative");
-            } else {
-                displayChart(values,true);
-                relative = true;
-                relButton.setText("Absolute");
-            }
-        }
-    }
     
     public static boolean isNumeric(String str){
         for (char c : str.toCharArray()){
@@ -231,8 +245,7 @@ public class GuiBuilder {
         return true;
     }
     
-    public void displayChart(HashMap<Integer,Double> values, boolean b){
-        graphPanel.removeAll();
+    public JFreeChart getBarChart(HashMap<Integer,Double> values, boolean b){
         JFreeChart chart = ChartFactory.createBarChart(
          "Results", 
          "Category", "Value", 
@@ -248,13 +261,9 @@ public class GuiBuilder {
             if(min<0.0)min = 0.0;
             yAxis.setRange(min, max+diff);
         }
+        return chart;
         
-        relButton.setVisible(true);
-        chartPanel = new ChartPanel(chart,false);
-        chartPanel.setPreferredSize(new Dimension(300,270)); 
-        graphPanel.add(chartPanel);
-        frame.pack();
-        graphPanel.validate();
+        
         
     }
     
@@ -264,5 +273,14 @@ public class GuiBuilder {
             dataset.addValue(entry.getValue(),"Roll" ,entry.getKey());
         }
         return dataset;
+    }
+    
+    public void displayChart(){
+        chartPanel = new ChartPanel(getBarChart(values,relBox.isSelected()));
+        chartPanel.setPreferredSize(new Dimension(300,270)); 
+        graphPanel.removeAll();
+        graphPanel.add(chartPanel);
+        frame.pack();
+        graphPanel.validate();
     }
 }
