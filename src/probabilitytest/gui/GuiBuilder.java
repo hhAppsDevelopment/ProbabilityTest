@@ -278,7 +278,7 @@ public class GuiBuilder {
     public JFreeChart getBarChart(HashMap<Integer,Double> values, boolean b){
         JFreeChart chart = ChartFactory.createBarChart(
          "Results", 
-         "Category", "Value", 
+         "Numbers", "Probability", 
          createDataset(values),PlotOrientation.VERTICAL, 
          false, false, false);
         
@@ -299,8 +299,8 @@ public class GuiBuilder {
     
     public JFreeChart getLineChart(HashMap<Integer,Double> values, boolean b){
         JFreeChart chart = ChartFactory.createLineChart(
-         "Results", 
-         "Category", "Value", 
+         "Selected number", 
+         "Number of rolls", "Probability", 
          createDataset(values),PlotOrientation.VERTICAL, 
          false, false, false);
         
