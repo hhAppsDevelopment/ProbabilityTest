@@ -152,6 +152,7 @@ public class GuiBuilder {
         indLabel = new JLabel("Show selected over time");
         fullscrButton = new JButton("Fullscreen");
         
+        fullscrButton.setEnabled(false);
         fullscrButton.addActionListener(new FullscrButtonListener());
         contPanel.add(indBox);
         contPanel.add(indLabel);
@@ -202,7 +203,7 @@ public class GuiBuilder {
 
     class FullscrButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            
+            displayChartFullScreen(ind);
         }
     }
 
@@ -263,6 +264,7 @@ public class GuiBuilder {
                 }
                 
                 displayChart(ind);
+                fullscrButton.setEnabled(true);
             }
         }
     }
@@ -338,5 +340,19 @@ public class GuiBuilder {
         graphPanel.add(chartPanel);
         frame.pack();
         graphPanel.validate();
+    }
+    
+    public void displayChartFullScreen(boolean b){
+        JFrame fullFrame = new JFrame();
+        ChartPanel fullPanel;
+        if(!b){
+            fullPanel = new ChartPanel(getBarChart(values,relBox.isSelected()));
+        } else {
+            fullPanel = new ChartPanel(getLineChart(values,relBox.isSelected()));
+        }
+        fullFrame.setContentPane(fullPanel);
+        fullFrame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        //fullFrame.setUndecorated(true);
+        fullFrame.setVisible(true);
     }
 }
