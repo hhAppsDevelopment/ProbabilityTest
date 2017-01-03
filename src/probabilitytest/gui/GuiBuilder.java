@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collections;
 import java.util.HashMap;
-import javafx.scene.chart.ValueAxis;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -29,7 +28,6 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import probabilitytest.behaviour.Probability;
@@ -90,7 +88,7 @@ public class GuiBuilder {
     }
     
     public void buildGui(){
-        frame = new JFrame("Valószínűségvizsgálat");
+        frame = new JFrame("Valószínűség-vizsgálat");
         bgPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         
         frame.setContentPane(bgPanel);
@@ -112,7 +110,7 @@ public class GuiBuilder {
         listPanel.setSize(350,330);    
         
         addPanel = new JPanel();
-        addLabel = new JLabel("Lehetőségek (számok) felvitele: ");
+        addLabel = new JLabel("Lehetőségek (számok) bevitele: ");
         addField = new JTextField(5);
         addButton = new JButton("Hozzáad");    
         
@@ -280,7 +278,7 @@ public class GuiBuilder {
     public JFreeChart getBarChart(HashMap<Integer,Double> values, boolean b){
         JFreeChart chart = ChartFactory.createBarChart(
          "Eredmények", 
-         "Számok", "Valószínűség", 
+         "Számok", "Előfordulás", 
          createDataset(values),PlotOrientation.VERTICAL, 
          false, false, false);
         
@@ -302,7 +300,7 @@ public class GuiBuilder {
     public JFreeChart getLineChart(HashMap<Integer,Double> values, boolean b){
         JFreeChart chart = ChartFactory.createLineChart(
          "Kiválasztott szám", 
-         "Dobások száma", "Valószínűség", 
+         "Dobások száma", "Előfordulás", 
          createDataset(values),PlotOrientation.VERTICAL, 
          false, false, false);
         
