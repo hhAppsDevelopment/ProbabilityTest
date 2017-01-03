@@ -215,6 +215,7 @@ public class GuiBuilder {
          "Category", "Value", 
          createDataset(values),PlotOrientation.VERTICAL, 
          false, false, false);
+        
         org.jfree.chart.axis.ValueAxis yAxis = chart.getCategoryPlot().getRangeAxis();
         
         Double min = Collections.min(values.values());
