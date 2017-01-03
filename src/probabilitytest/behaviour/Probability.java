@@ -6,6 +6,8 @@ import java.util.HashMap;
 import probabilitytest.model.Dice;
 
 public class Probability {
+    
+    static int RESOLUTION = 100;
 
     public static HashMap<Integer, Double> roll(int[] numbers, int numberOfChecks){
         HashMap<Integer, Double> hashMap = new HashMap<>();
@@ -28,16 +30,17 @@ public class Probability {
     public static HashMap<Integer, Double> continousRoll(int[] numbers, int maxNumberOfChecks, int numberToTest){
         HashMap<Integer, Double> hashMap = new HashMap<>();
         Dice dice = new Dice(numbers);
-        int d = 1;
-        
+        int res;
+        if(maxNumberOfChecks < RESOLUTION) res = maxNumberOfChecks; else res = RESOLUTION;
+            
         ArrayList<Integer> ali = new ArrayList<>();
         for(int i = 0; i<numbers.length; i++){
             if(numbers[i] == numberToTest)ali.add(i);
         }
         double lastProb = 0.0;
-        for(int i = 1; i<=10; i++){
+        for(int i = 1; i<=res; i++){
             double prob = 0.0;
-            double[] probabilities = dice.throwDice(maxNumberOfChecks/10);
+            double[] probabilities = dice.throwDice(maxNumberOfChecks/res);
             for(Integer j: ali){
                 prob = prob + probabilities[j];
             }
