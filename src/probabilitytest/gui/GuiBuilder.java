@@ -246,7 +246,7 @@ public class GuiBuilder {
     }
     
     public JFreeChart getBarChart(HashMap<Integer,Double> values, boolean b){
-        JFreeChart chart = ChartFactory.createBarChart(
+        JFreeChart chart = ChartFactory.createLineChart(
          "Results", 
          "Category", "Value", 
          createDataset(values),PlotOrientation.VERTICAL, 
