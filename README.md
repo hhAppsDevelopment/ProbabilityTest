@@ -5,7 +5,7 @@ Java 8 and the JFreeChart libraries (/lib/jcommon-1.0.0.jar and /lib/jfreechart-
 ##Installment##
 There are two versions available at the moment: <br/>
 + **English** version: "master" branch
-+ **Hungarian** version: "hungarian" branch
++ **Hungarian** version: "hungarian" branch (there is a .exe file in /executables for the hungarian version, use that or follow the instructions below)
 
 Download the one you wish to use, then: <br/>
 
