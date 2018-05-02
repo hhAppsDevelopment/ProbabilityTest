@@ -1,8 +1,8 @@
-#ProbabilityTest#
+# ProbabilityTest
 ProbabilityTest is a simple program useful for simulating dice throwing and other forms of randomness.
-##Requirements##
+## Requirements
 Java 8 and the JFreeChart libraries (/lib/jcommon-1.0.0.jar and /lib/jfreechart-1.0.1.jar)
-##Installment##
+## Installment
 There are two versions available at the moment: <br/>
 + **English** version: "master" branch
 + **Hungarian** version: "hungarian" branch (there is a .exe file in /executables for the hungarian version, use that or follow the instructions below)
